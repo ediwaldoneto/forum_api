@@ -16,15 +16,19 @@ import br.com.sbp1.forum.repository.TopicoRepository;
 
 @RestController
 public class TopicosController {
-	
+
 	@Autowired
 	private TopicoRepository topicoRepository;
-	
-	@RequestMapping("/topicos")
-	public List<TopicoDto> lista() {
 
-	    List<Topico> topicos = topicoRepository.findAll();
-		
-		return TopicoDto.converter(topicos);
+	@RequestMapping("/topicos")
+	public List<TopicoDto> lista(String nomeCurso) {
+		if (nomeCurso == null) {
+			List<Topico> topicos = topicoRepository.findAll();
+			return TopicoDto.converter(topicos);
+		} else {
+			List<Topico> topicos = topicoRepository.findByCurso_Nome(nomeCurso);
+			return TopicoDto.converter(topicos);
+		}
+
 	}
 }
