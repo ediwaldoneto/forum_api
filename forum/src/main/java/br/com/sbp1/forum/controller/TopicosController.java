@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +47,7 @@ public class TopicosController {
 	}
 
 	@PostMapping
-	public ResponseEntity<TopicoDto> cadastrar(@RequestBody TopicoForm form,
+	public ResponseEntity<TopicoDto> cadastrar(@RequestBody @Valid TopicoForm form,
 			UriComponentsBuilder uriComponentsBuilder) {
 		Topico topico = form.converter(cursoRepository);
 		topicoRepository.save(topico);
