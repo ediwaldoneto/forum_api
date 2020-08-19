@@ -2,12 +2,11 @@ package br.com.sbp1.forum.controller;
 
 import java.net.URI;
 import java.util.List;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,6 +46,7 @@ public class TopicosController {
 	}
 
 	@PostMapping
+	@Transactional
 	public ResponseEntity<TopicoDto> cadastrar(@RequestBody @Valid TopicoForm form,
 			UriComponentsBuilder uriComponentsBuilder) {
 		Topico topico = form.converter(cursoRepository);
@@ -57,7 +57,7 @@ public class TopicosController {
 	}
 
 	@GetMapping("/{id}")
-	public DetalharTopicoDto detalhar(@PathVariable Long id) {
+	public DetalharTopicoDto detalhar(@PathVariable @Valid Long id) {
 		Topico topico = topicoRepository.getOne(id);
 		return new DetalharTopicoDto(topico);
 	}
@@ -68,6 +68,15 @@ public class TopicosController {
 		Topico topico = form.atualizar(id, topicoRepository);
 
 		return ResponseEntity.ok(new TopicoDto(topico));
+	}
+
+	@DeleteMapping("/{id}")
+	@Transactional
+	public ResponseEntity<?> deletar(@PathVariable Long id) {
+
+		topicoRepository.deleteById(id);
+
+		return ResponseEntity.ok().build();
 	}
 
 }
