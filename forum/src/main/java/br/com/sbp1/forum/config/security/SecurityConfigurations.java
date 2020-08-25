@@ -46,9 +46,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/topicos").permitAll()
 				.antMatchers(HttpMethod.POST, "/auth").permitAll().antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
-				.antMatchers(HttpMethod.GET,  "/actuator/health").permitAll()
-				.anyRequest().authenticated().and().csrf().disable().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+				.antMatchers(HttpMethod.GET, "/actuator/health").permitAll().anyRequest().authenticated().and().csrf()
+				.disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, UsuarioRepository),
 						UsernamePasswordAuthenticationFilter.class);
 
@@ -57,8 +56,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	// Configurações de Recursos Estaticos
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		// TODO Auto-generated method stub
-		super.configure(web);
+		web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**",
+				"/swagger-resources/**");
 	}
 
 	/*
